@@ -10,9 +10,8 @@ import {
   Param,
 } from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
-import { RegisterDto } from 'src/auth/dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { UpdateUserDto } from './dto/users.dto';
+import { CreateUserDto, UpdateUserDto } from './dto/users.dto';
 import { UsersService } from './users.service';
 
 @Controller('users/')
@@ -40,7 +39,7 @@ export class UsersController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @Post('')
-  async createUser(@Request() req, @Body() dto: RegisterDto) {
+  async createUser(@Request() req, @Body() dto: CreateUserDto) {
     if (req.user.admin) {
       return await this.usersService.create(dto);
     }

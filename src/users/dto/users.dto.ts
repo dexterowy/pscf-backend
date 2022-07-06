@@ -8,3 +8,16 @@ export class UpdateUserDto {
   @ApiProperty()
   lastName: string;
 }
+
+export class CreateUserDto {
+  @ApiProperty()
+  email: string;
+  @ApiProperty()
+  password: string;
+  @ApiProperty()
+  admin: boolean;
+  @ApiProperty()
+  firstName?: string;
+  @ApiProperty()
+  lastName?: string;
+}

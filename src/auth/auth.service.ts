@@ -4,6 +4,7 @@ import { LoginDto, RegisterDto } from './dto';
 import * as bcrypt from 'bcrypt';
 import { UsersService } from 'src/users/users.service';
 import { JwtService } from '@nestjs/jwt';
+import { CreateUserDto } from 'src/users/dto/users.dto';
 
 @Injectable()
 export class AuthService {
@@ -48,7 +49,7 @@ export class AuthService {
     throw new HttpException('Invalid credentials', 401);
   }
 
-  async register(data: RegisterDto) {
+  async register(data: CreateUserDto) {
     console.log(JSON.stringify(data, null, 2));
     const hashedPassword = await bcrypt.hash(data.password, 10);
     console.log(hashedPassword);
