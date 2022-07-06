@@ -1,0 +1,97 @@
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { CreateLockDto, UpdateLockDto } from './dto/locks.dto';
+import { LocksService } from './locks.service';
+
+@Controller('locks')
+export class LocksController {
+  constructor(private locksService: LocksService) {}
+
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Get('/admin')
+  async getAllLocks(@Req() req) {
+    if (req.user.admin) {
+      return await this.locksService.getAllLocks();
+    }
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Post('/admin')
+  async createLock(@Req() req, @Body() dto: CreateLockDto) {
+    if (req.user.admin) {
+      return await this.locksService.createLock(dto);
+    }
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Put('/admin')
+  async updateLock(@Req() req, @Body() dto: UpdateLockDto) {
+    if (req.user.admin) {
+      return await this.locksService.updateLock(dto);
+    }
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Delete('/admin/:lockId')
+  async deleteLock(@Req() req, @Param('lockId') id: string) {
+    if (req.user.admin) {
+      return await this.locksService.deleteLock({ id });
+    }
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Get('/admin/assigned/:lockId')
+  async getAssignedUsers(@Req() req, @Param('lockId') lockId: string) {
+    if (req.user.admin) {
+      return await this.locksService.getUsersAssignedToLock({ lockId });
+    }
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Post('/admin/assigned/:lockId')
+  async assignUser(
+    @Req() req,
+    @Param('lockId') lockId: string,
+    @Body() body: { userId: string },
+  ) {
+    if (req.user.admin) {
+      return await this.locksService.assignUserToLock({
+        lockId,
+        userId: body.userId,
+      });
+    }
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Post('/admin/assigned/:lockId')
+  async revokeUser(
+    @Req() req,
+    @Param('lockId') lockId: string,
+    @Body() body: { userId: string },
+  ) {
+    if (req.user.admin) {
+      return await this.locksService.deleteUserFromLock({
+        lockId,
+        userId: body.userId,
+      });
+    }
+  }
+}

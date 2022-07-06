@@ -12,14 +12,33 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async login(data: LoginDto) {
-    const user = await this.userService.findOne(data.email);
+  async loginAdmin(data: LoginDto) {
+    const user = await this.userService.findAdmin(data.email);
     if (user) {
       const passwordMatch = await bcrypt.compare(data.password, user.password);
       if (passwordMatch) {
         const payload = {
           email: user.email,
           id: user.id,
+          admin: user.admin,
+        };
+        return {
+          access_token: this.jwtService.sign(payload),
+        };
+      }
+    }
+    throw new HttpException('Invalid credentials', 401);
+  }
+
+  async loginUser(data: LoginDto) {
+    const user = await this.userService.findAdmin(data.email);
+    if (user) {
+      const passwordMatch = await bcrypt.compare(data.password, user.password);
+      if (passwordMatch) {
+        const payload = {
+          email: user.email,
+          id: user.id,
+          admin: user.admin,
         };
         return {
           access_token: this.jwtService.sign(payload),
@@ -35,6 +54,7 @@ export class AuthService {
     console.log(hashedPassword);
     await this.userService.create({
       ...data,
+      admin: true,
       password: hashedPassword,
     });
   }

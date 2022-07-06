@@ -5,6 +5,7 @@ CREATE TABLE "User" (
     "password" TEXT NOT NULL,
     "firstName" TEXT,
     "lastName" TEXT,
+    "admin" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -16,6 +17,7 @@ CREATE TABLE "Lock" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "ipAddress" TEXT NOT NULL,
+    "macAddress" TEXT NOT NULL,
     "enabled" BOOLEAN NOT NULL DEFAULT true,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
