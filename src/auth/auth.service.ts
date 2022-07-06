@@ -14,7 +14,7 @@ export class AuthService {
 
   async loginAdmin(data: LoginDto) {
     const user = await this.userService.findAdmin(data.email);
-    if (user) {
+    if (user.admin) {
       const passwordMatch = await bcrypt.compare(data.password, user.password);
       if (passwordMatch) {
         const payload = {
@@ -32,7 +32,7 @@ export class AuthService {
 
   async loginUser(data: LoginDto) {
     const user = await this.userService.findAdmin(data.email);
-    if (user) {
+    if (!user.admin) {
       const passwordMatch = await bcrypt.compare(data.password, user.password);
       if (passwordMatch) {
         const payload = {
