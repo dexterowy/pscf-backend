@@ -36,6 +36,8 @@ export class GetUsersAssignedToLockDto {
 export class DeleteUserFromLock extends AssignUserToLockDto {}
 
 export class RegisterLockDto {
+  @ApiProperty()
   uuid: string;
+  @ApiProperty()
   ipAddress: string;
 }
