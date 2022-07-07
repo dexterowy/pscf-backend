@@ -6,7 +6,7 @@ export class CreateLockDto {
   @ApiProperty()
   ipAddress: string;
   @ApiProperty()
-  macAddress: string;
+  serviceUUID: string;
   @ApiProperty()
   enabled: boolean;
 }
@@ -34,3 +34,8 @@ export class GetUsersAssignedToLockDto {
 }
 
 export class DeleteUserFromLock extends AssignUserToLockDto {}
+
+export class RegisterLockDto {
+  uuid: string;
+  ipAddress: string;
+}

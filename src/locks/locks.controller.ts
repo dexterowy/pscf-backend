@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { CreateLockDto, UpdateLockDto } from './dto/locks.dto';
+import { CreateLockDto, RegisterLockDto, UpdateLockDto } from './dto/locks.dto';
 import { LocksService } from './locks.service';
 
 @Controller('locks')
@@ -92,6 +92,13 @@ export class LocksController {
         lockId,
         userId: body.userId,
       });
+    }
+  }
+
+  @Post('/register')
+  async registerLock(@Req() req, @Body() body: RegisterLockDto) {
+    if (req.user.admin) {
+      return await this.locksService.registerLock(body);
     }
   }
 }
