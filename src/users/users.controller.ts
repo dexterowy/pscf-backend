@@ -41,7 +41,7 @@ export class UsersController {
   @Post('')
   async createUser(@Request() req, @Body() dto: CreateUserDto) {
     if (req.user.admin) {
-      return await this.usersService.create(dto);
+      return await this.usersService.createUser(dto);
     }
   }
 

@@ -15,8 +15,6 @@ export class CreateUserDto {
   @ApiProperty()
   password: string;
   @ApiProperty()
-  admin: boolean;
-  @ApiProperty()
   firstName?: string;
   @ApiProperty()
   lastName?: string;

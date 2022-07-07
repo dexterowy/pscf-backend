@@ -53,9 +53,8 @@ export class AuthService {
     console.log(JSON.stringify(data, null, 2));
     const hashedPassword = await bcrypt.hash(data.password, 10);
     console.log(hashedPassword);
-    await this.userService.create({
+    await this.userService.createAdmin({
       ...data,
-      admin: true,
       password: hashedPassword,
     });
   }

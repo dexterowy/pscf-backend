@@ -1,4 +1,5 @@
 import { HttpException, Injectable } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 import { RegisterDto } from 'src/auth/dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateUserDto, UpdateUserDto } from './dto/users.dto';
@@ -37,7 +38,7 @@ export class UsersService {
     return null;
   }
 
-  async create(user: CreateUserDto) {
+  async createUser(user: CreateUserDto) {
     const existingUser = await this.prismaService.user.findUnique({
       where: {
         email: user.email,
@@ -46,9 +47,31 @@ export class UsersService {
     if (existingUser) {
       throw new HttpException('User already exists', 401);
     }
+    const hashedPassword = await bcrypt.hash(user.password, 10);
     return await this.prismaService.user.create({
       data: {
         ...user,
+        admin: false,
+        password: hashedPassword,
+      },
+    });
+  }
+
+  async createAdmin(user: CreateUserDto) {
+    const existingUser = await this.prismaService.user.findUnique({
+      where: {
+        email: user.email,
+      },
+    });
+    if (existingUser) {
+      throw new HttpException('User already exists', 401);
+    }
+    const hashedPassword = await bcrypt.hash(user.password, 10);
+    return await this.prismaService.user.create({
+      data: {
+        ...user,
+        admin: true,
+        password: hashedPassword,
       },
     });
   }
