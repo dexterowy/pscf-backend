@@ -7,5 +7,6 @@ import { LocksService } from './locks.service';
   imports: [UsersModule],
   controllers: [LocksController],
   providers: [LocksService],
+  exports: [LocksService],
 })
 export class LocksModule {}
