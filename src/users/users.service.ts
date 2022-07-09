@@ -8,10 +8,10 @@ import { CreateUserDto, UpdateUserDto } from './dto/users.dto';
 export class UsersService {
   constructor(private prismaService: PrismaService) {}
 
-  async findAdmin(username) {
+  async findAdmin(email: string) {
     const user = await this.prismaService.user.findUnique({
       where: {
-        email: username,
+        email,
       },
     });
     if (user.admin) return user;

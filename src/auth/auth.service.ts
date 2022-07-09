@@ -51,11 +51,10 @@ export class AuthService {
 
   async register(data: CreateUserDto) {
     console.log(JSON.stringify(data, null, 2));
-    const hashedPassword = await bcrypt.hash(data.password, 10);
-    console.log(hashedPassword);
+    // const hashedPassword = await bcrypt.hash(data.password, 10);
+    // console.log(hashedPassword);
     await this.userService.createAdmin({
       ...data,
-      password: hashedPassword,
     });
   }
 }
