@@ -89,8 +89,8 @@ export class UsersService {
         id: dto.id,
       },
       data: {
-        ...user,
-        ...dto,
+        firstName: dto.firstName,
+        lastName: dto.lastName,
       },
     });
     return updatedUser;
