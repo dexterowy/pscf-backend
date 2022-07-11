@@ -96,9 +96,7 @@ export class LocksController {
   }
 
   @Post('/register')
-  async registerLock(@Req() req, @Body() body: RegisterLockDto) {
-    if (req.user.admin) {
-      return await this.locksService.registerLock(body);
-    }
+  async registerLock(@Body() body: RegisterLockDto) {
+    return await this.locksService.registerLock(body);
   }
 }

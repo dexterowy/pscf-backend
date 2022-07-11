@@ -35,7 +35,7 @@ export class DeleteUserFromLock extends AssignUserToLockDto {}
 
 export class RegisterLockDto {
   @ApiProperty()
-  uuid: string;
+  serviceUUID: string;
   @ApiProperty()
   ipAddress: string;
 }

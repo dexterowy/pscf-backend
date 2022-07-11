@@ -126,14 +126,14 @@ export class LocksService {
   async registerLock(dto: RegisterLockDto) {
     const lock = await this.prismaService.lock.findUnique({
       where: {
-        serviceUUID: dto.uuid,
+        serviceUUID: dto.serviceUUID,
       },
     });
     if (!lock) throw new HttpException('Lock is not registered in system', 400);
 
     await this.prismaService.lock.update({
       where: {
-        serviceUUID: dto.uuid,
+        serviceUUID: dto.serviceUUID,
       },
       data: {
         ipAddress: dto.ipAddress,
