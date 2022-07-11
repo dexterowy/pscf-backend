@@ -4,8 +4,6 @@ export class CreateLockDto {
   @ApiProperty()
   name: string;
   @ApiProperty()
-  ipAddress: string;
-  @ApiProperty()
   serviceUUID: string;
   @ApiProperty()
   enabled: boolean;

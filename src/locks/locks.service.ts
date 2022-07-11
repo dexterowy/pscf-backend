@@ -19,7 +19,12 @@ export class LocksService {
   ) {}
 
   async createLock(dto: CreateLockDto) {
-    const lock = await this.prismaService.lock.create({ data: dto });
+    const lock = await this.prismaService.lock.create({
+      data: {
+        serviceUUID: dto.serviceUUID,
+        name: dto.name,
+      },
+    });
     return lock;
   }
 

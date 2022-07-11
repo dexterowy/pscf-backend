@@ -25,7 +25,7 @@ model User {
 model Lock {
   id          String        @id @default(uuid())
   name        String
-  ipAddress   String
+  ipAddress   String?
   serviceUUID String        @unique
   enabled     Boolean       @default(true)
   createdAt   DateTime      @default(now())
