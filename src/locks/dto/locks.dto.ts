@@ -5,8 +5,6 @@ export class CreateLockDto {
   name: string;
   @ApiProperty()
   serviceUUID: string;
-  @ApiProperty()
-  enabled: boolean;
 }
 
 export class UpdateLockDto extends CreateLockDto {
