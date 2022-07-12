@@ -19,13 +19,25 @@ export class LocksService {
   ) {}
 
   async createLock(dto: CreateLockDto) {
-    const lock = await this.prismaService.lock.create({
+    const lock = await this.prismaService.lock.findFirst({
+      where: {
+        serviceUUID: dto.serviceUUID,
+      },
+    });
+
+    if (lock)
+      throw new HttpException(
+        'Lock with provided serviceUUID already exists',
+        400,
+      );
+
+    const newLock = await this.prismaService.lock.create({
       data: {
         serviceUUID: dto.serviceUUID,
         name: dto.name,
       },
     });
-    return lock;
+    return newLock;
   }
 
   async getAllLocks() {
