@@ -11,7 +11,12 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
-import { CreateLockDto, RegisterLockDto, UpdateLockDto } from './dto/locks.dto';
+import {
+  AssignUserToLockBodyDto,
+  CreateLockDto,
+  RegisterLockDto,
+  UpdateLockDto,
+} from './dto/locks.dto';
 import { LocksService } from './locks.service';
 
 @Controller('locks')
@@ -69,7 +74,7 @@ export class LocksController {
   async assignUser(
     @Req() req,
     @Param('lockId') lockId: string,
-    @Body() body: { userId: string },
+    @Body() body: AssignUserToLockBodyDto,
   ) {
     if (req.user.admin) {
       return await this.locksService.assignUserToLock({
@@ -81,11 +86,11 @@ export class LocksController {
 
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
-  @Post('/admin/assigned/:lockId')
+  @Post('/admin/revoke/:lockId')
   async revokeUser(
     @Req() req,
     @Param('lockId') lockId: string,
-    @Body() body: { userId: string },
+    @Body() body: AssignUserToLockBodyDto,
   ) {
     if (req.user.admin) {
       return await this.locksService.deleteUserFromLock({

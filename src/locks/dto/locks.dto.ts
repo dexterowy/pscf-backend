@@ -24,6 +24,11 @@ export class AssignUserToLockDto {
   lockId: string;
 }
 
+export class AssignUserToLockBodyDto {
+  @ApiProperty()
+  userId: string;
+}
+
 export class GetUsersAssignedToLockDto {
   @ApiProperty()
   lockId: string;
