@@ -104,4 +104,38 @@ export class LocksController {
   async registerLock(@Body() body: RegisterLockDto) {
     return await this.locksService.registerLock(body);
   }
+
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Get()
+  async getUserLocks(@Req() req) {
+    return await this.locksService.getUserLocks({ userId: req.user.id });
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Post('/open/:serviceUUID')
+  async openLock(@Req() req, @Param('serviceUUID') serviceUUID: string) {
+    return await this.locksService.openLockByUser({
+      serviceUUID,
+      userId: req.user.id,
+    });
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Post('/close/:serviceUUID')
+  async closeLock(@Req() req, @Param('serviceUUID') serviceUUID: string) {
+    return await this.locksService.closeLockByUser({
+      serviceUUID,
+      userId: req.user.id,
+    });
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @Get('/refresh')
+  async refreshLocks() {
+    return await this.locksService.refreshLocksStatus();
+  }
 }

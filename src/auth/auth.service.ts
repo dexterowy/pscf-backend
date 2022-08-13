@@ -32,7 +32,7 @@ export class AuthService {
   }
 
   async loginUser(data: LoginDto) {
-    const user = await this.userService.findAdmin(data.email);
+    const user = await this.userService.findUser(data.email);
     if (user && !user.admin) {
       const passwordMatch = await bcrypt.compare(data.password, user.password);
       if (passwordMatch) {

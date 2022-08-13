@@ -1,12 +1,16 @@
 import { HttpException, Injectable } from '@nestjs/common';
+import axios from 'axios';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UsersService } from 'src/users/users.service';
 import {
   AssignUserToLockDto,
+  CloseLockDto,
   CreateLockDto,
   DeleteLockDto,
   DeleteUserFromLock,
+  GetUserLocksDto,
   GetUsersAssignedToLockDto,
+  OpenLockDto,
   RegisterLockDto,
   UpdateLockDto,
 } from './dto/locks.dto';
@@ -151,5 +155,95 @@ export class LocksService {
         ipAddress: dto.ipAddress,
       },
     });
+  }
+
+  async getUserLocks(dto: GetUserLocksDto) {
+    const locks = await this.prismaService.lock.findMany({
+      where: {
+        Permissions: {
+          some: {
+            user: {
+              id: dto.userId,
+            },
+          },
+        },
+      },
+    });
+
+    return locks;
+  }
+
+  async openLockByUser(dto: OpenLockDto) {
+    const lock = await this.prismaService.lock.findUnique({
+      where: {
+        serviceUUID: dto.serviceUUID,
+      },
+      include: {
+        Permissions: {
+          select: {
+            userId: true,
+          },
+        },
+      },
+    });
+
+    if (lock.Permissions.find((user) => user.userId === dto.userId)) {
+      try {
+        await axios.post(`http://${lock.ipAddress}/close`, {});
+        console.log('close lock');
+        return 'Lock closed';
+      } catch (err) {
+        throw new HttpException('Cannot connect to lock', 400);
+      }
+    }
+
+    throw new HttpException('Access denied', 400);
+  }
+
+  async closeLockByUser(dto: CloseLockDto) {
+    const lock = await this.prismaService.lock.findUnique({
+      where: {
+        serviceUUID: dto.serviceUUID,
+      },
+      include: {
+        Permissions: {
+          select: {
+            userId: true,
+          },
+        },
+      },
+    });
+    console.log(lock);
+    if (lock.Permissions.find((user) => user.userId === dto.userId)) {
+      try {
+        await axios.post(`http://${lock.ipAddress}/close`, {});
+        console.log('close lock');
+        return 'Lock closed';
+      } catch (err) {
+        throw new HttpException('Cannot connect to lock', 400);
+      }
+    }
+
+    throw new HttpException('Access denied', 400);
+  }
+
+  async refreshLocksStatus() {
+    const locks = await this.prismaService.lock.findMany();
+    locks.forEach(async (lock) => {
+      try {
+        const response = await axios.get(`http://${lock.ipAddress}/status`);
+        await this.prismaService.lock.update({
+          where: {
+            id: lock.id,
+          },
+          data: {
+            opened: !response.data.isDoorLock,
+          },
+        });
+      } catch {
+        console.log(`Cannot connect to lock ${lock.serviceUUID}`);
+      }
+    });
+    return locks;
   }
 }

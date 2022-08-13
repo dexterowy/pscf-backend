@@ -42,3 +42,19 @@ export class RegisterLockDto {
   @ApiProperty()
   ipAddress: string;
 }
+
+export class GetUserLocksDto {
+  userId: string;
+}
+
+export class OpenLockDto {
+  @ApiProperty()
+  serviceUUID: string;
+  userId: string;
+}
+
+export class CloseLockDto {
+  @ApiProperty()
+  serviceUUID: string;
+  userId: string;
+}
