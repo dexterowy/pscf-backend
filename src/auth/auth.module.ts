@@ -14,7 +14,9 @@ import { JwtStrategy } from './jwt.strategy';
     PassportModule,
     JwtModule.register({
       secret: config.secret, //TODO: cut secret to .env
-      signOptions: { expiresIn: config.tokenExpirationTime },
+      signOptions: {
+        expiresIn: '7d',
+      },
     }),
   ],
   providers: [AuthService, JwtStrategy, UsersService],

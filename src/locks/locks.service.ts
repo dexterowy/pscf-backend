@@ -189,9 +189,9 @@ export class LocksService {
 
     if (lock.Permissions.find((user) => user.userId === dto.userId)) {
       try {
-        await axios.post(`http://${lock.ipAddress}/close`, {});
-        console.log('close lock');
-        return 'Lock closed';
+        await axios.post(`http://${lock.ipAddress}/open`, {});
+        console.log('open lock');
+        return 'Lock opened';
       } catch (err) {
         throw new HttpException('Cannot connect to lock', 400);
       }

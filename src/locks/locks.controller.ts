@@ -109,6 +109,7 @@ export class LocksController {
   @UseGuards(JwtAuthGuard)
   @Get()
   async getUserLocks(@Req() req) {
+    await this.locksService.refreshLocksStatus();
     return await this.locksService.getUserLocks({ userId: req.user.id });
   }
 
